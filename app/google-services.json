@@ -1,0 +1,126 @@
+{
+  "project_info": {
+    "project_number": "296054073735",
+    "project_id": "ladm-u5-proyecto-cd-artes",
+    "storage_bucket": "ladm-u5-proyecto-cd-artes.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:296054073735:android:05bdea9005d3d97d164b22",
+        "android_client_info": {
+          "package_name": "com.example.ladm_proyecto_cd_artes_v3"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "296054073735-juu480e8kfqj0dj13nkh6ghbrfrmrqhp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCYgS9S9hHL-LBAwDS6NRRLO8d9gvd80cM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "296054073735-juu480e8kfqj0dj13nkh6ghbrfrmrqhp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:296054073735:android:4bf4f1181ad69de1164b22",
+        "android_client_info": {
+          "package_name": "com.example.ladm_u5_proyecto_cd_artes"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "296054073735-juu480e8kfqj0dj13nkh6ghbrfrmrqhp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCYgS9S9hHL-LBAwDS6NRRLO8d9gvd80cM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "296054073735-juu480e8kfqj0dj13nkh6ghbrfrmrqhp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:296054073735:android:51570bc8bf9fee47164b22",
+        "android_client_info": {
+          "package_name": "com.example.proyecto_ciudad_de_las_artes"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "296054073735-juu480e8kfqj0dj13nkh6ghbrfrmrqhp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCYgS9S9hHL-LBAwDS6NRRLO8d9gvd80cM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "296054073735-juu480e8kfqj0dj13nkh6ghbrfrmrqhp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:296054073735:android:5d3a363c2be596e6164b22",
+        "android_client_info": {
+          "package_name": "com.example.u5_proyecto_cd_artes_v2"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "296054073735-juu480e8kfqj0dj13nkh6ghbrfrmrqhp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCYgS9S9hHL-LBAwDS6NRRLO8d9gvd80cM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "296054073735-juu480e8kfqj0dj13nkh6ghbrfrmrqhp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
