@@ -219,11 +219,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 }
 
 
+//EVENTO CADA VES QUE ME MUEVO
 class Oyente(puntero:MapsActivity) : LocationListener {
     private val p = puntero
     override fun onLocationChanged(location: Location) {
-
-        //  p.binding.tv1.setText("${location.latitude},${location.longitude}")//Mostrar la localizacion
 
         var geoPosicionGPS = GeoPoint(location.latitude,location.longitude)
         Toast.makeText(p,"Te estas moviendo", Toast.LENGTH_SHORT).show()
