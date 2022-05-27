@@ -1,20 +1,23 @@
 package com.example.ladm_proyecto_cd_artes_v3
 
+import com.example.ladm_proyecto_cd_artes_v3.databinding.ActivityMapsBinding
 import android.Manifest
+import android.content.Context
 import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
-
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
-import com.example.ladm_proyecto_cd_artes_v3.databinding.ActivityMapsBinding
+import android.location.Location
+import android.location.LocationListener
+import android.location.LocationManager
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.firebase.firestore.FirebaseFirestore
@@ -27,6 +30,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     val posicion = ArrayList<Data>()
     val lugares = ArrayList<String>()
     var baseRemota = FirebaseFirestore.getInstance()
+    private lateinit var locacion:LocationManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -83,12 +87,19 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
 
+        locacion = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        val oyente = Oyente(this)
 
+        locacion.requestLocationUpdates(LocationManager.GPS_PROVIDER,0,01f,oyente)
     }
 
 
 
     override fun onMapReady(googleMap: GoogleMap) {
+        if(ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)==PackageManager.PERMISSION_DENIED){
+            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),1)
+        }
+
         mMap = googleMap
 
         crearMarcadores()
@@ -102,6 +113,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         mMap.setOnMapClickListener {
             miUbicacion()
         }
+
+        mMap.uiSettings.isZoomControlsEnabled =  true
+        mMap.isMyLocationEnabled = true
     }
 
 
@@ -124,6 +138,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                             .setPositiveButton("OK"){p,q-> }
                             .show()
                         bandera=true
+                        //TODO abrir una ventaita con las cosas
                     }
                 }
 
@@ -202,3 +217,38 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         mMap.addMarker(cremeria)
     }
 }
+
+
+class Oyente(puntero:MapsActivity) : LocationListener {
+    private val p = puntero
+    override fun onLocationChanged(location: Location) {
+
+        //  p.binding.tv1.setText("${location.latitude},${location.longitude}")//Mostrar la localizacion
+
+        var geoPosicionGPS = GeoPoint(location.latitude,location.longitude)
+        Toast.makeText(p,"Te estas moviendo", Toast.LENGTH_SHORT).show()
+
+        for(item in p.posicion ){
+            if(item.estoyEn(geoPosicionGPS)){
+                AlertDialog.Builder(p)
+                    .setMessage("Usted se encuentra en ${item.nombre}  (onLocationChanged)")
+                    .setPositiveButton("OK"){p,q-> }
+                    .show()
+
+                /*    //Abrir la otra ventana Main Activity
+                AlertDialog.Builder(p)
+                    .setMessage("Usted se encuentra en ${item.nombre}. ¿Desea conocer más acerca de este lugar?")
+                    .setPositiveButton("OK"){r, q->
+                        val intent = Intent(p, MainActivity ::class.java)
+                        intent.putExtra("idNombre",item.nombre)
+                        p.startActivity(intent)
+                    }
+                    .setNegativeButton("NO"){d,i->
+
+                    }
+                    .show()  */
+            }
+        }
+    }
+}
+
