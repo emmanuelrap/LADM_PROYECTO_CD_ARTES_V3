@@ -53,21 +53,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),1)
         }
 
-        //----- BOTTOM SHEET DIALOG --------
-        val dialog = BottomSheetDialog(this)
-        val vista = layoutInflater.inflate(R.layout.bottom_sheet_dialog,null)
-        tvNombre = vista.findViewById(R.id.tvNombre)
-        tvDes = vista.findViewById(R.id.tvDes)
 
-        var ubicacion = object {
-            var nombre = "Este es el nombre"
-            var descripcion = "Esta es la descrpcion"
-        }
-        tvNombre.text=ubicacion.nombre
-        tvDes.text=ubicacion.descripcion
-        dialog.setCancelable(true)
-        dialog.setContentView(vista)
-        dialog.show()
 
 
         //RECUPERACION DE COORDENAS FIREBASE ------------------------------------------
@@ -125,9 +111,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         if(ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)==PackageManager.PERMISSION_DENIED){
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),1)
         }
-
         mMap = googleMap
-
         crearMarcadores()
 
         //ANIMACION DE CAMARA
@@ -138,12 +122,31 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         //CLIC EN MAPA
         mMap.setOnMapClickListener {
             //miUbicacion()
-
+           // abrirBottomSheet()
         }
 
+        //Ajustes de botones graficos de google
         mMap.uiSettings.isZoomControlsEnabled =  true
         mMap.isMyLocationEnabled = true
 
+    }
+
+    fun abrirBottomSheet(nom : String,desc :String){
+        //----- BOTTOM SHEET DIALOG --------
+        val dialog = BottomSheetDialog(this)
+        val vista = layoutInflater.inflate(R.layout.bottom_sheet_dialog,null)
+        tvNombre = vista.findViewById(R.id.tvNombre)
+        tvDes = vista.findViewById(R.id.tvDes)
+
+        var ubicacion = object {
+            var nombre = nom
+            var descripcion = desc
+        }
+        tvNombre.text=ubicacion.nombre
+        tvDes.text=ubicacion.descripcion
+        dialog.setCancelable(true)
+        dialog.setContentView(vista)
+        dialog.show()
     }
 
 
@@ -262,6 +265,9 @@ class Oyente(puntero:MapsActivity) : LocationListener {
                     .setMessage("Usted se encuentra en ${item.nombre}  (onLocationChanged)")
                     .setPositiveButton("OK"){p,q-> }
                     .show()
+
+                //Abrir la ventanita de informacion
+                p.abrirBottomSheet(item.nombre,item.descripcion)
 
                 /*    //Abrir la otra ventana Main Activity
                 AlertDialog.Builder(p)
