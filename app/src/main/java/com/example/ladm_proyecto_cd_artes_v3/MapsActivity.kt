@@ -60,8 +60,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         }
 
 
-
-
         //RECUPERACION DE COORDENAS FIREBASE ------------------------------------------
         FirebaseFirestore.getInstance()
             .collection("cdArtes")
@@ -92,6 +90,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                     data.descripcion=documento.getString("descripcion").toString()
                     data.horario=documento.getString("horario").toString()
                     data.telefono=documento.getString("telefono").toString()
+                    data.imagen=documento.getString("imagen").toString()
                     posicion.add(data)
                     res+=data.toString()+"\n\n"
                 }
@@ -142,7 +141,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
    // fun abrirBottomSheet(nom : String,desc :String, cal:String){
-   fun abrirBottomSheet(nom : String,desc :String,tel :String,hor :String){
+   fun abrirBottomSheet(nom : String,desc :String,tel :String,hor :String, cal : Float,ima:String){
         //----- BOTTOM SHEET DIALOG --------
         val dialog = BottomSheetDialog(this)
         val vista = layoutInflater.inflate(R.layout.bottom_sheet_dialog,null)
@@ -159,13 +158,16 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             var descripcion = desc
             var telefono = tel
             var horario = hor
-           // var calificacion = cal.toFloat()
+            var calificacion = cal
+
         }
         tvNombre.text=ubicacion.nombre
         tvDes.text=ubicacion.descripcion
         tvTel.text=ubicacion.telefono
         tvHor.text=ubicacion.horario
-        rbCal.rating = 5f
+        rbCal.rating = ubicacion.calificacion
+
+       if(ima=="casaemmanuel")
         ivImagen.setImageResource(R.drawable.casa)
 
         dialog.setCancelable(true)
@@ -281,7 +283,7 @@ class Oyente(puntero:MapsActivity) : LocationListener {
     override fun onLocationChanged(location: Location) {
 
         var geoPosicionGPS = GeoPoint(location.latitude,location.longitude)
-        Toast.makeText(p,"Te estas moviendo", Toast.LENGTH_SHORT).show()
+        Toast.makeText(p,"Te estas moviendo...", Toast.LENGTH_SHORT).show()
 
         for(item in p.posicion ){
             if(item.estoyEn(geoPosicionGPS)){
@@ -291,7 +293,7 @@ class Oyente(puntero:MapsActivity) : LocationListener {
                     .show()*/
 
                 //Abrir la ventanita de informacion
-                p.abrirBottomSheet(item.nombre,item.descripcion,item.telefono,item.horario)
+                p.abrirBottomSheet(item.nombre,item.descripcion,item.telefono,item.horario,item.calificacion,item.imagen)
                // p.abrirBottomSheet(item.nombre,item.descripcion,item.calificacion)
 
                 /*    //Abrir la otra ventana Main Activity

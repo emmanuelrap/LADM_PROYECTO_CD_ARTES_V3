@@ -15,8 +15,9 @@ import com.google.firebase.firestore.GeoPoint
         var descripcion: String = ""
         var telefono: String = ""
         var horario: String = ""
+        var calificacion: Float= 5f
+        var imagen =""
 
-        //var calificacion: String =""
 
         override fun toString(): String {
             return nombre+"\n"+posicion1.latitude+","+posicion1.longitude+"\n"+
