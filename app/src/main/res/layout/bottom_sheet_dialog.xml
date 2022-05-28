@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="160dp"
+        android:layout_margin="2dp">
+
+        <ImageView
+            android:id="@+id/ivFoto"
+            android:layout_width="128dp"
+            android:layout_height="142dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="10dp"
+            android:src="@drawable/icon_user_card" />
+
+        <TextView
+            android:id="@+id/tvNombre"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_toEndOf="@id/ivFoto"
+            android:layout_toRightOf="@id/ivFoto"
+            android:hint="Nombre del Lugar"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvDes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tvNombre"
+            android:layout_marginTop="10dp"
+            android:layout_toEndOf="@id/ivFoto"
+            android:layout_toRightOf="@id/ivFoto"
+            android:hint="Descripcion"
+            android:textColor="@color/black"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/tbh"
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tvDes"
+            android:layout_marginStart="21dp"
+            android:layout_marginLeft="21dp"
+            android:layout_marginTop="10dp"
+            android:layout_toEndOf="@id/ivFoto"
+            android:layout_toRightOf="@id/ivFoto"
+            android:hint="Horario"
+            android:textColor="@color/black"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/tvHorario"
+            android:layout_width="58dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tvDes"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="107dp"
+            android:layout_marginTop="12dp"
+            android:layout_toEndOf="@+id/tbh"
+            android:layout_toRightOf="@id/ivFoto"
+            android:hint="-- -- -- --"
+            android:textColor="@color/black"
+            android:textSize="15sp" />
+
+        <RatingBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="3dp" />
+    </RelativeLayout>
+
+</androidx.cardview.widget.CardView>

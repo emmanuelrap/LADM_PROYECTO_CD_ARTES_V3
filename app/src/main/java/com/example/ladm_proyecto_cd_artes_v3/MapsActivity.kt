@@ -1,27 +1,31 @@
 package com.example.ladm_proyecto_cd_artes_v3
 
-import com.example.ladm_proyecto_cd_artes_v3.databinding.ActivityMapsBinding
 import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
-import androidx.appcompat.app.AppCompatActivity
+import android.location.Location
+import android.location.LocationListener
+import android.location.LocationManager
 import android.os.Bundle
+import android.widget.LinearLayout
+import android.widget.TextView
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import com.example.ladm_proyecto_cd_artes_v3.databinding.ActivityMapsBinding
+import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
-import android.location.Location
-import android.location.LocationListener
-import android.location.LocationManager
-import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
-import com.google.android.gms.location.LocationServices
-import com.google.android.gms.maps.model.BitmapDescriptorFactory
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.GeoPoint
+
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
@@ -31,6 +35,12 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     val lugares = ArrayList<String>()
     var baseRemota = FirebaseFirestore.getInstance()
     private lateinit var locacion:LocationManager
+
+    lateinit var tvNombre:TextView
+    lateinit var tvDes:TextView
+
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,6 +52,23 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         if(ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)== PackageManager.PERMISSION_DENIED){
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),1)
         }
+
+        //----- BOTTOM SHEET DIALOG --------
+        val dialog = BottomSheetDialog(this)
+        val vista = layoutInflater.inflate(R.layout.bottom_sheet_dialog,null)
+        tvNombre = vista.findViewById(R.id.tvNombre)
+        tvDes = vista.findViewById(R.id.tvDes)
+
+        var ubicacion = object {
+            var nombre = "Este es el nombre"
+            var descripcion = "Esta es la descrpcion"
+        }
+        tvNombre.text=ubicacion.nombre
+        tvDes.text=ubicacion.descripcion
+        dialog.setCancelable(true)
+        dialog.setContentView(vista)
+        dialog.show()
+
 
         //RECUPERACION DE COORDENAS FIREBASE ------------------------------------------
         FirebaseFirestore.getInstance()
@@ -83,8 +110,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
 
 
-        val mapFragment = supportFragmentManager
-            .findFragmentById(R.id.map) as SupportMapFragment
+        val mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
 
         locacion = getSystemService(Context.LOCATION_SERVICE) as LocationManager
@@ -112,13 +138,16 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         //CLIC EN MAPA
         mMap.setOnMapClickListener {
             //miUbicacion()
+
         }
 
         mMap.uiSettings.isZoomControlsEnabled =  true
         mMap.isMyLocationEnabled = true
+
     }
 
 
+/*
     private  fun miUbicacion(){
         LocationServices.getFusedLocationProviderClient(this)
             .lastLocation.addOnSuccessListener {
@@ -154,7 +183,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                     .setPositiveButton("OK"){p,q-> }
                     .show()
             }
-    }
+    }*/
 
     //CREAR LOS MARCADORES
     private fun crearMarcadores() {
