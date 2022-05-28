@@ -7,9 +7,7 @@ import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
 import android.os.Bundle
-import android.widget.LinearLayout
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -36,8 +34,16 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     var baseRemota = FirebaseFirestore.getInstance()
     private lateinit var locacion:LocationManager
 
+    //BottomSheetLayout
     lateinit var tvNombre:TextView
     lateinit var tvDes:TextView
+    lateinit var tvHor:TextView
+    lateinit var tvTel:TextView
+    lateinit var rbCal:RatingBar
+    lateinit var ivImagen:ImageView
+
+    //Imagenes
+     var arregloImagenes = mutableListOf(R.drawable.casa)
 
 
 
@@ -83,15 +89,19 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                     data.nombre = documento.getString("nombre").toString()
                     data.posicion1=documento.getGeoPoint("punto1")!!
                     data.posicion2=documento.getGeoPoint("punto2")!!
+                    data.descripcion=documento.getString("descripcion").toString()
+                    data.horario=documento.getString("horario").toString()
+                    data.telefono=documento.getString("telefono").toString()
                     posicion.add(data)
                     res+=data.toString()+"\n\n"
                 }
-
+                /*
+                //saber los datos que esta recuperando
                 Toast.makeText(this,"DATOS-GEOPOINTS \n\n"+res, Toast.LENGTH_LONG).show()
                 AlertDialog.Builder(this)
                     .setMessage("       - INFO DE FIREBASE - \n\n"+lugares)
                     .setPositiveButton("OK"){p,q-> }
-                    .show()
+                    .show()*/
             } //fin evento snapshoot
 
 
@@ -131,19 +141,33 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     }
 
-    fun abrirBottomSheet(nom : String,desc :String){
+   // fun abrirBottomSheet(nom : String,desc :String, cal:String){
+   fun abrirBottomSheet(nom : String,desc :String,tel :String,hor :String){
         //----- BOTTOM SHEET DIALOG --------
         val dialog = BottomSheetDialog(this)
         val vista = layoutInflater.inflate(R.layout.bottom_sheet_dialog,null)
         tvNombre = vista.findViewById(R.id.tvNombre)
         tvDes = vista.findViewById(R.id.tvDes)
+        rbCal = vista.findViewById(R.id.rbCal)
+        tvTel = vista.findViewById(R.id.tvTel)
+        tvHor = vista.findViewById(R.id.tvHorario)
+        ivImagen = vista.findViewById(R.id.ivFoto)
+
 
         var ubicacion = object {
             var nombre = nom
             var descripcion = desc
+            var telefono = tel
+            var horario = hor
+           // var calificacion = cal.toFloat()
         }
         tvNombre.text=ubicacion.nombre
         tvDes.text=ubicacion.descripcion
+        tvTel.text=ubicacion.telefono
+        tvHor.text=ubicacion.horario
+        rbCal.rating = 5f
+        ivImagen.setImageResource(R.drawable.casa)
+
         dialog.setCancelable(true)
         dialog.setContentView(vista)
         dialog.show()
@@ -261,13 +285,14 @@ class Oyente(puntero:MapsActivity) : LocationListener {
 
         for(item in p.posicion ){
             if(item.estoyEn(geoPosicionGPS)){
-                AlertDialog.Builder(p)
+               /* AlertDialog.Builder(p)
                     .setMessage("Usted se encuentra en ${item.nombre}  (onLocationChanged)")
                     .setPositiveButton("OK"){p,q-> }
-                    .show()
+                    .show()*/
 
                 //Abrir la ventanita de informacion
-                p.abrirBottomSheet(item.nombre,item.descripcion)
+                p.abrirBottomSheet(item.nombre,item.descripcion,item.telefono,item.horario)
+               // p.abrirBottomSheet(item.nombre,item.descripcion,item.calificacion)
 
                 /*    //Abrir la otra ventana Main Activity
                 AlertDialog.Builder(p)

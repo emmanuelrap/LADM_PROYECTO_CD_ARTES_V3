@@ -6,65 +6,109 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="160dp"
+        android:layout_height="230dp"
         android:layout_margin="2dp">
 
         <ImageView
             android:id="@+id/ivFoto"
-            android:layout_width="128dp"
-            android:layout_height="142dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="10dp"
+            android:layout_width="144dp"
+            android:layout_height="112dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="0dp"
+            android:layout_marginTop="32dp"
             android:layout_marginEnd="10dp"
-            android:layout_marginBottom="10dp"
             android:src="@drawable/icon_user_card" />
+
 
         <TextView
             android:id="@+id/tvNombre"
-            android:layout_width="match_parent"
+            android:layout_width="230dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="0dp"
+            android:layout_marginLeft="0dp"
             android:layout_marginTop="10dp"
             android:layout_toEndOf="@id/ivFoto"
             android:layout_toRightOf="@id/ivFoto"
-            android:hint="Nombre del Lugar"
+            android:text="Nombre del Lugar"
+            android:textAlignment="center"
             android:textColor="@color/black"
             android:textSize="18sp"
             android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/tvDes"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/tvNombre"
-            android:layout_marginTop="10dp"
-            android:layout_toEndOf="@id/ivFoto"
-            android:layout_toRightOf="@id/ivFoto"
-            android:hint="Descripcion"
-            android:textColor="@color/black"
-            android:textSize="15sp" />
+        <ScrollView
+            android:layout_width="191dp"
+            android:layout_height="57dp"
+            android:layout_below="@+id/tvNombre"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="13dp"
+            android:layout_marginEnd="43dp">
+
+            <TextView
+                android:id="@+id/tvDes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tvNombre"
+                android:layout_toEndOf="@id/ivFoto"
+                android:layout_toRightOf="@id/ivFoto"
+                android:hint="Descripcion "
+                android:textColor="@color/black"
+                android:textSize="15sp" />
+        </ScrollView>
 
         <TextView
             android:id="@+id/tbh"
-            android:layout_width="60dp"
+            android:layout_width="67dp"
             android:layout_height="wrap_content"
-            android:layout_below="@id/tvDes"
-            android:layout_marginStart="21dp"
-            android:layout_marginLeft="21dp"
-            android:layout_marginTop="10dp"
+            android:layout_above="@+id/rbCal"
+            android:layout_marginStart="17dp"
+            android:layout_marginLeft="17dp"
+            android:layout_marginTop="99dp"
+            android:layout_marginBottom="14dp"
             android:layout_toEndOf="@id/ivFoto"
             android:layout_toRightOf="@id/ivFoto"
-            android:hint="Horario"
+            android:text="Horario:"
+
             android:textColor="@color/black"
             android:textSize="15sp" />
 
         <TextView
-            android:id="@+id/tvHorario"
-            android:layout_width="58dp"
+            android:id="@+id/tvt"
+            android:layout_width="43dp"
             android:layout_height="wrap_content"
-            android:layout_below="@id/tvDes"
-            android:layout_marginStart="16dp"
-            android:layout_marginLeft="107dp"
-            android:layout_marginTop="12dp"
+
+            android:layout_alignParentStart="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="188dp"
+            android:layout_marginBottom="93dp"
+            android:text="Tel:"
+            android:textColor="@color/black"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/tvTel"
+            android:layout_width="147dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="96dp"
+            android:layout_marginEnd="21dp"
+            android:layout_marginBottom="93dp"
+            android:layout_toEndOf="@+id/ivFoto"
+            android:hint="----------"
+            android:textColor="@color/black"
+            android:textSize="15sp" />
+
+        <TextView
+
+            android:id="@+id/tvHorario"
+            android:layout_width="149dp"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/rbCal"
+            android:layout_marginStart="3dp"
+            android:layout_marginLeft="102dp"
+            android:layout_marginTop="42dp"
+            android:layout_marginBottom="13dp"
             android:layout_toEndOf="@+id/tbh"
             android:layout_toRightOf="@id/ivFoto"
             android:hint="-- -- -- --"
@@ -72,12 +116,15 @@
             android:textSize="15sp" />
 
         <RatingBar
+            android:id="@+id/rbCal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="3dp" />
+            android:layout_marginEnd="87dp"
+            android:layout_marginBottom="-4dp"
+            android:rating="4.7"
+            android:stepSize="0.1" />
     </RelativeLayout>
 
 </androidx.cardview.widget.CardView>
