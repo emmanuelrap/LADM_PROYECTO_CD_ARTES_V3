@@ -2,6 +2,7 @@ package com.example.ladm_proyecto_cd_artes_v3
 
 import android.Manifest
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
 import android.location.LocationListener
@@ -12,7 +13,6 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import com.example.ladm_proyecto_cd_artes_v3.databinding.ActivityMapsBinding
-import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -20,19 +20,20 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.maps.model.PolylineOptions
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.GeoPoint
 
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
-
     private lateinit var mMap: GoogleMap
     private lateinit var binding: ActivityMapsBinding
     val posicion = ArrayList<Data>()
     val lugares = ArrayList<String>()
-    var baseRemota = FirebaseFirestore.getInstance()
+    private var listaLugares= ArrayList<String>()
     private lateinit var locacion:LocationManager
+    private lateinit var autoCompletar : AutoCompleteTextView
 
     //BottomSheetLayout
     lateinit var tvNombre:TextView
@@ -42,11 +43,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     lateinit var rbCal:RatingBar
     lateinit var ivImagen:ImageView
 
-    //Imagenes
-     var arregloImagenes = mutableListOf(R.drawable.casa)
-
-
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,11 +50,16 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         binding = ActivityMapsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+
+
         //PERMISOS
         if(ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)== PackageManager.PERMISSION_DENIED){
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),1)
         }
 
+        //BUSCADOR DE LUGARES
+        autoCompletar = findViewById(R.id.acBusqueda)
+        listaLugares = ArrayList()
 
         //RECUPERACION DE COORDENAS FIREBASE ------------------------------------------
         FirebaseFirestore.getInstance()
@@ -67,6 +68,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 var res=""
                 lugares.clear() // si no se pone te estara duplicando datos
                 posicion.clear()
+                listaLugares.clear()
 
                 if(error!=null){
                     //si hubo error
@@ -81,9 +83,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                             " punto 1: ${documento.getGeoPoint("punto1")!! }\n"+
                             " punto 2: ${documento.getGeoPoint("punto2")!! }\n\n"
                     lugares.add(cadena)
+                    listaLugares!!.add(documento.getString("nombre")!!)
 
                     var data=Data(this)
-                    //var data=Data(this)
                     data.nombre = documento.getString("nombre").toString()
                     data.posicion1=documento.getGeoPoint("punto1")!!
                     data.posicion2=documento.getGeoPoint("punto2")!!
@@ -93,7 +95,11 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                     data.imagen=documento.getString("imagen").toString()
                     posicion.add(data)
                     res+=data.toString()+"\n\n"
+
                 }
+                autoCompletar.setAdapter(ArrayAdapter(this, android.R.layout.simple_list_item_1, listaLugares!!))
+
+
                 /*
                 //saber los datos que esta recuperando
                 Toast.makeText(this,"DATOS-GEOPOINTS \n\n"+res, Toast.LENGTH_LONG).show()
@@ -112,8 +118,36 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         val oyente = Oyente(this)
 
         locacion.requestLocationUpdates(LocationManager.GPS_PROVIDER,0,01f,oyente)
-    }
 
+        //BUSQUEDA (AUTOCOMPLETAR)
+        autoCompletar.setOnClickListener {
+            autoCompletar.showDropDown()
+        }
+
+        autoCompletar.setOnItemClickListener { _, _, _, _ ->
+            var nomLugarClick = autoCompletar.text.toString()
+
+            if(nomLugarClick=="Universidad de Música")
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng(21.511986208992873, -104.90210851297405),19f),3000,null )
+            if(nomLugarClick=="Tacos AFTER")
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng(21.51165095509239, -104.90403546698616),19f),3000,null )
+            if(nomLugarClick=="Parque de la Dignidad")
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng(21.512381454724817, -104.90404305341924),19f),3000,null )
+            if(nomLugarClick=="Zona de Teatro")
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng(21.51108085342471, -104.90307804391163),19f),3000,null )
+            if(nomLugarClick=="Zona de Comida")
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng(21.51091873667444, -104.9037786567254),19f),3000,null )
+            if(nomLugarClick=="Skate Park")
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng(21.51197562204376, -104.9027154276223),19f),3000,null )
+
+        }
+
+        binding.btnBorrar.setOnClickListener {
+            binding.acBusqueda.setText("")
+        }
+        
+    }
+    
 
 
     override fun onMapReady(googleMap: GoogleMap) {
@@ -124,9 +158,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         crearMarcadores()
 
         //ANIMACION DE CAMARA
-        mMap.animateCamera(
-            CameraUpdateFactory.newLatLngZoom(LatLng(21.51108496011311, -104.90307329600743),17f),3000,null //Cuanto zoom y cuando durarà
-        )
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng(21.51108496011311, -104.90307329600743),17f),3000,null )//Cuanto zoom y cuando durarà)
 
         //CLIC EN MAPA
         mMap.setOnMapClickListener {
@@ -228,8 +260,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     //CREAR LOS MARCADORES
     private fun crearMarcadores() {
-
-        val jardinDignidad=MarkerOptions().position(LatLng(21.512381454724817, -104.90404305341924)).title("Jardín de la Dignidad")
+         val jardinDignidad=MarkerOptions().position(LatLng(21.512381454724817, -104.90404305341924)).title("Jardín de la Dignidad")
             .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
             .snippet("Parque")
             .flat(true).rotation(0f)
@@ -247,9 +278,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN))
             .snippet("Zona Recreativa")
 
-        val estatuas=MarkerOptions().position(LatLng(21.510740472140885, -104.90317061360524)).title("Estatuas Conmemorativas")
-            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN))
-            .snippet("Zona Conmemorativa")
 
         val escuelaMusica=MarkerOptions().position(LatLng(21.511986208992873, -104.90210851297405)).title("Escuela de Musica")
             .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN))
@@ -259,17 +287,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE))
             .snippet("Alimentos")
 
-        val dolores =MarkerOptions().position(LatLng(    21.510396830580504, -104.90331087782104)).title("Dolores")
-            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ROSE))
-            .snippet("Alimentos")
+        val zonaTeatro =MarkerOptions().position(LatLng(    21.51108085342471, -104.90307804391163)).title("Zona de Tacos")
+            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE))
+            .snippet("Zona Recreativa")
 
-        val laSanta =MarkerOptions().position(LatLng(    21.510330049125745, -104.90314384918146)).title("La Santa")
-            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ROSE))
-            .snippet("Bar")
-
-        val cremeria =MarkerOptions().position(LatLng(    21.51248992670049, -104.90184382014519)).title("Cremeria Yoli")
-            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE))
-            .snippet("Negocio")
 
         mMap.setOnMapClickListener {
             Toast.makeText(this,"Clic en el Mapa", Toast.LENGTH_SHORT).show()
@@ -280,11 +301,11 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         mMap.addMarker(afterTacos)
         mMap.addMarker(skatePark)
         mMap.addMarker(escuelaMusica)
-        mMap.addMarker(estatuas)
-        mMap.addMarker(dolores)
+        mMap.addMarker(zonaTeatro)
         mMap.addMarker(zonaTacos)
-        mMap.addMarker(laSanta)
-        mMap.addMarker(cremeria)
+
+
+
     }
 }
 
