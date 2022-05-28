@@ -169,6 +169,18 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
        if(ima=="casaemmanuel")
         ivImagen.setImageResource(R.drawable.casa)
+       if(ima=="escuela")
+           ivImagen.setImageResource(R.drawable.escuela)
+       if(ima=="after")
+           ivImagen.setImageResource(R.drawable.after)
+       if(ima=="comida")
+           ivImagen.setImageResource(R.drawable.comida)
+       if(ima=="dignidad")
+           ivImagen.setImageResource(R.drawable.dignidad)
+       if(ima=="skate")
+           ivImagen.setImageResource(R.drawable.skate)
+       if(ima=="teatro")
+           ivImagen.setImageResource(R.drawable.teatro)
 
         dialog.setCancelable(true)
         dialog.setContentView(vista)
