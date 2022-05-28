@@ -111,7 +111,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         //CLIC EN MAPA
         mMap.setOnMapClickListener {
-            miUbicacion()
+            //miUbicacion()
         }
 
         mMap.uiSettings.isZoomControlsEnabled =  true
@@ -138,7 +138,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                             .setPositiveButton("OK"){p,q-> }
                             .show()
                         bandera=true
-                        //TODO abrir una ventaita con las cosas
+                        //aqui es cuando le da clic al mapa
                     }
                 }
 
